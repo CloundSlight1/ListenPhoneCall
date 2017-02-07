@@ -36,6 +36,8 @@ public class Utils {
             if (cursor != null && cursor.moveToFirst()) {
                 return cursor.getString(0);
             }
+        } catch (Exception e) {
+            Log2.e(TAG, e);
         } finally {
             if (cursor != null) {
                 cursor.close();
@@ -211,8 +213,9 @@ public class Utils {
         return false;
     }
 
-    public static String getRecordPath() {
-        return Environment.getExternalStorageDirectory().getPath() + "/Record";
+    public static String getRecordPath(Context context) {
+        return context.getExternalFilesDir(Environment.DIRECTORY_MUSIC).getAbsolutePath();
+//        return Environment.getExternalStorageDirectory().getPath() + "/Record";
 //        File file = new File("/storage/sdcard1/");
 //        if (file.exists()) {
 //            return "/storage/sdcard1/Record";

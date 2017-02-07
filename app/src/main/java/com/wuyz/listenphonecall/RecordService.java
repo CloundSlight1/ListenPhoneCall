@@ -21,7 +21,6 @@ import android.telephony.TelephonyManager;
 
 import java.io.File;
 import java.io.FileDescriptor;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -447,21 +446,26 @@ public class RecordService extends Service {
                     if (service.isRecording() || !PhoneReceiver.sIsRecording ||
                             service.mTelephoneManager.getCallState() == TelephonyManager.CALL_STATE_IDLE)
                         break;
-                    File recordPath = new File(Utils.getRecordPath());
+                    File recordPath = new File(Utils.getRecordPath(service));
+                    Log2.d(TAG, "%s", recordPath);
                     if (!recordPath.exists()) {
                         if (!recordPath.mkdirs()) {
                             Log2.e(TAG, "handleMessage mkdir failed: " + recordPath);
-                            break;
+                            return;
                         }
                     }
                     // lxx_551_0_12215111.amr
                     String phone = service.getPhone();
-                    File file = new File(recordPath, String.format(Locale.getDefault(), "%s_%s_%d_%d.amr",
-                            Utils.getNameByPhone(service, phone), phone, service.getInOut(), System.currentTimeMillis()));
-                    if (file.exists())
-                        file.delete();
-                    service.setFile(file);
-                    service.startRecord();
+                    try {
+                        File file = new File(recordPath, String.format(Locale.getDefault(), "%s_%s_%d_%d.amr",
+                                Utils.getNameByPhone(service, phone), phone, service.getInOut(), System.currentTimeMillis()));
+                        if (file.exists())
+                            file.delete();
+                        service.setFile(file);
+                        service.startRecord();
+                    } catch (Exception e) {
+                        Log2.e(TAG, e);
+                    }
                     break;
                 case MSG_STOP_RECORD:
                     Log2.d(TAG, "handleMessage MSG_STOP_RECORD");

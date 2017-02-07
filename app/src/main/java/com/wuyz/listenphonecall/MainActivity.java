@@ -173,7 +173,7 @@ public class MainActivity extends Activity {
         }
 
         public void fileChanged() {
-            baseItems = getRecords(Utils.getRecordPath());
+            baseItems = getRecords(Utils.getRecordPath(context));
             setItems();
             notifyDataSetChanged();
         }
@@ -267,7 +267,7 @@ public class MainActivity extends Activity {
                         progressDialog = new ProgressDialog(context);
                         progressDialog.setIndeterminate(true);
                         progressDialog.show();
-                        MediaScannerConnection.scanFile(context, new String[]{Utils.getRecordPath()}, null, scanCallback);
+                        MediaScannerConnection.scanFile(context, new String[]{Utils.getRecordPath(context)}, null, scanCallback);
                     }
                 }
             });
