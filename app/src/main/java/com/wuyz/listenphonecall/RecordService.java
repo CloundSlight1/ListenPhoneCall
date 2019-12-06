@@ -90,7 +90,6 @@ public class RecordService extends Service {
                             while ((n = inputStream.read(buffer)) > 0) {
                                 outputStream.write(buffer, 0, n);
                             }
-                            outputStream.close();
                         }
                         inputStream.close();
                         int ret = Runtime.getRuntime().exec("chmod 0755 " + filePath).waitFor();
